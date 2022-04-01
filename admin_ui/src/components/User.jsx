@@ -10,11 +10,11 @@ export const User = () => {
     },[page]);
 
     const getUsers = (page = 1) => {
-        fetch(`http://localhost:3001/users?_page=${page}&_limit=10`).then((res)=>res.json()).then((data) => setUsers(data));
+        fetch(`https://fake-server-eva.herokuapp.com/users?_page=${page}&_limit=10`).then((res)=>res.json()).then((data) => setUsers(data));
     }
     return (
         <>
-        <div className="container-sm cont1 mt-2">
+        <div className="container1">
         <h1 className="dispaly-1 text-center">Users List</h1>
         <form>
         <input type="password" id="inputPassword5" className="form-control" aria-describedby="passwordHelpBlock"/>

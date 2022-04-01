@@ -1,5 +1,7 @@
-.cont1{
+.container1{
     width: 75%;
+    border: 1px solid red;
+    margin: auto;
 }
 .table{
     width: 75%;
