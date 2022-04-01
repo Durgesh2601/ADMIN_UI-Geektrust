@@ -1,3 +1,5 @@
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 import { useEffect, useState } from "react";
 import Pagination from '@material-ui/lab/Pagination';
 import "./User.css";
@@ -15,9 +17,18 @@ export const User = () => {
     return (
         <>
         <div className="container1">
-        <h1 className="dispaly-1 text-center">Users List</h1>
+        <Typography variant="h2" sx={{ textAlign: 'center' }} component="div" gutterBottom>
+        Users List
+      </Typography>
         <form>
-        <input type="password" id="inputPassword5" className="form-control" aria-describedby="passwordHelpBlock"/>
+        <TextField
+          sx={{ width: '95%' }}
+          size='small'
+          id="outlined-textarea"
+          label="Search user"
+          placeholder="Search by name, email or role"
+          multiline
+        />
         </form>
         </div>
         <table className="table mt-4">

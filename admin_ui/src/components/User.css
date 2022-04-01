@@ -1,15 +1,14 @@
 .container1{
-    width: 75%;
-    border: 1px solid red;
+    width: 60%;
     margin: auto;
 }
 .table{
-    width: 75%;
+    width:60%;
     margin: auto;
 }
 .pagination{
     display: flex;
-    width: 70%;
+    width: 50%;
     gap: 15%;
     margin: auto;
 }
