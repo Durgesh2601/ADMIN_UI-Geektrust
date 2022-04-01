@@ -1,0 +1,13 @@
+.cont1{
+    width: 75%;
+}
+.table{
+    width: 75%;
+    margin: auto;
+}
+.pagination{
+    display: flex;
+    width: 70%;
+    gap: 15%;
+    margin: auto;
+}
