@@ -22,7 +22,7 @@ table > thead > td{
 }
 td,th {
     border-bottom: 1px solid darkgray;
-    padding: 0.7rem;
+    padding: 0.5rem;
 }
 .tr{
     background-color: lightblue;

@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
 import "./User.css";
+import { AiTwotoneEdit, AiTwotoneDelete, AiOutlineSave } from "react-icons/ai";
 export const User = () => {
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
+    //  const [hideIcon, setHideIcon] = useState(false);
+    const [dataLength, setDataLength] = useState(0);
     
     useEffect(() => {
         getUsers(page);
+        allUsers();
     }, [page]);
     
     const getUsers = (page) => {
         fetch(`https://fake-server-eva.herokuapp.com/users?_page=${page}&_limit=10`).then((res) => res.json()).then((data) => {
             setUsers(data);
         })
+    };
+    const allUsers = () => {
+        fetch("https://fake-server-eva.herokuapp.com/users").then((res) =>res.json()).then((data) => {
+            setDataLength(data.length)
+        });
     };
     const handleCheck = (e) => {
         const { name, checked } = e.target;
@@ -27,7 +36,17 @@ export const User = () => {
           setUsers(newUsers);
         }
     }
-    console.log(users)
+    const handleEdit = (e) => {
+        let tempUsers = users.map((el) =>
+        e.id === el.id ? {...el, doEdit : true} : el);
+        setUsers(tempUsers);
+       // setHideIcon(true);
+    }
+    const handleDeleteOne = (id) => {
+       const updatedUsers = users.filter((e) => e.id !== id);
+        setUsers(updatedUsers);
+    }
+
     return (
         <>
         <div className="container_1">
@@ -50,10 +69,12 @@ export const User = () => {
                    return(
                    <tr key={e.id}>
                         <td><input type="checkbox" name={e.name} onChange={handleCheck} checked={e?.isChecked || false}/></td>
-                        <td>{e.name}</td>
-                        <td>{e.email}</td>
-                        <td>{e.role}</td>
-                        <td>Edit Delete</td>
+                        <td>{e.name} <input value={e.name} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}} /> </td>
+                        <td>{e.email} <input value={e.email} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
+                        <td>{e.role} <input value={e.role} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
+                        <td><AiTwotoneEdit id={e.id} onClick={() => handleEdit(e)} style={!e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/>
+                        <AiOutlineSave style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/>
+                         <AiTwotoneDelete onClick={() =>handleDeleteOne(e.id)} style={{color:"rgb(239, 55, 86)"}}/></td>
                     </tr>)
                 })}
             </tbody>
@@ -65,7 +86,7 @@ export const User = () => {
             </div>
             <div>
                 <button disabled={page === 1} onClick={() => setPage(page-1)}>Prev</button>
-                <button onClick={() => setPage(page+1)}>Next</button>
+                <button disabled={page === Math.ceil(dataLength/10)} onClick={() => setPage(page+1)}>Next</button>
             </div>
         </div>
         </>
