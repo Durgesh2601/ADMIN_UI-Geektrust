@@ -41,10 +41,17 @@ export const User = () => {
        const updatedUsers = users.filter((e) => e.id !== id);
         setUsers(updatedUsers);
     }
-    function searchUser()
     const handleSearch = (e) => {
         e.preventDefault();
+        const updatedUsers = users.filter((el) =>
+            el.name===query || el.email === query || el.role === query);
+            if(updatedUsers.length ===0) {
+                alert("Oops! No user found with the given data");
+                window.reload();
+            }
+            setUsers(updatedUsers);
     }
+
     //////------///////
     const handleEdit = (e) => {
         let tempUsers = users.map((el) =>
