@@ -2,7 +2,7 @@
     width: 60%;
     margin: auto;
 }
-.container_1 > input {
+.container_1 > form > input {
     width: 95%;
     height: 1.5rem;
     outline: none;

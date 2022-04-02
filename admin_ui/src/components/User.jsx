@@ -3,8 +3,9 @@ import "./User.css";
 import { AiTwotoneEdit, AiTwotoneDelete, AiOutlineSave } from "react-icons/ai";
 export const User = () => {
     const [users, setUsers] = useState([]);
+    const [query, setQuery] = useState("");
     const [page, setPage] = useState(1);
-    //  const [hideIcon, setHideIcon] = useState(false);
+    const [updatedUser, setUpdatedUser] = useState({});
     const [dataLength, setDataLength] = useState(0);
     
     useEffect(() => {
@@ -36,22 +37,36 @@ export const User = () => {
           setUsers(newUsers);
         }
     }
-    const handleEdit = (e) => {
-        let tempUsers = users.map((el) =>
-        e.id === el.id ? {...el, doEdit : true} : el);
-        setUsers(tempUsers);
-       // setHideIcon(true);
-    }
     const handleDeleteOne = (id) => {
        const updatedUsers = users.filter((e) => e.id !== id);
         setUsers(updatedUsers);
     }
-
+    function searchUser()
+    const handleSearch = (e) => {
+        e.preventDefault();
+    }
+    //////------///////
+    const handleEdit = (e) => {
+        let tempUsers = users.map((el) =>
+        e.id === el.id ? {...el, doEdit : true} : el);
+        // setUpdatedUser(tempUsers);
+        setUsers(tempUsers);
+    }
+    const handleChange = (e) => {
+         const {name, value} = e.target;
+         setUpdatedUser({...updatedUser, [name] : value, doEdit:false});
+    }
+    const handleSave = (e) => {
+       console.log(e);
+       console.log(updatedUser)
+    }
+    /////////------.///////
     return (
         <>
         <div className="container_1">
         <h1>Users List</h1>
-        <input type="text" placeholder="Search by name email or role" />
+        <form onSubmit={handleSearch}>
+        <input type="text" placeholder="Search by name email or role" onChange={(e) => setQuery(e.target.value)} /></form>
         </div>
         <div className="container_2">
         <table>
@@ -69,11 +84,11 @@ export const User = () => {
                    return(
                    <tr key={e.id}>
                         <td><input type="checkbox" name={e.name} onChange={handleCheck} checked={e?.isChecked || false}/></td>
-                        <td>{e.name} <input value={e.name} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}} /> </td>
-                        <td>{e.email} <input value={e.email} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
-                        <td>{e.role} <input value={e.role} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
+                        <td>{e.name} <input defaultValue={e.name} name={e.name} onChange={handleChange} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}} /> </td>
+                        <td>{e.email} <input defaultValue={e.email} name={e.email} onChange={handleChange} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
+                        <td>{e.role} <input defaultValue={e.role} name={e.role} onChange={handleChange} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
                         <td><AiTwotoneEdit id={e.id} onClick={() => handleEdit(e)} style={!e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/>
-                        <AiOutlineSave style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/>
+                        <AiOutlineSave style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}} onClick={()=>handleSave(e)}/>
                          <AiTwotoneDelete onClick={() =>handleDeleteOne(e.id)} style={{color:"rgb(239, 55, 86)"}}/></td>
                     </tr>)
                 })}
