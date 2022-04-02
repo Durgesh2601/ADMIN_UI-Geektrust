@@ -1,0 +1,45 @@
+.container_1{
+    width: 60%;
+    margin: auto;
+}
+.container_1 > input {
+    width: 95%;
+    height: 1.5rem;
+    outline: none;
+    border-radius: 5px;
+}
+.container_2{
+    width: 60%;
+    margin: auto;
+    margin-top: 1%;
+}
+table {
+    width: 99%;
+    margin: auto;
+}
+table > thead > td{
+    background-color: black;
+}
+td,th {
+    border-bottom: 1px solid darkgray;
+    padding: 0.7rem;
+}
+.tr{
+    background-color: lightblue;
+}
+.footer{
+    margin-top: 1% !important;
+    width: 57%;
+    margin: auto;
+    display: flex;
+    gap: 10%;
+}
+.btn{
+    background-color: rgb(239, 55, 86);
+    border: none;
+    color: white;
+    border-radius: 7px;
+    height: 2rem;
+    width: 8rem;
+    cursor: pointer;
+}
