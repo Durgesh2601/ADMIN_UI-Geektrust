@@ -60,6 +60,8 @@ export const User = () => {
     }
     const newUsers = users.filter((e) => !selectedRows.includes(e.id));
     setUsers(newUsers);
+    alert("Successfully deleted selected users! No users on this page click ok to go the next page");
+    setPage(page+1);
   };
   const handleSearch = (e) => {
     e.preventDefault();
@@ -95,9 +97,7 @@ export const User = () => {
     }
     setUsers([...users]);
   };
-  return users.length < 1 ? (
-    <h1>No users found</h1>
-  ) : (
+  return (
     <>
       <div className="container_1">
         <h1>Users List</h1>
@@ -273,6 +273,5 @@ export const User = () => {
           </ul>
         </div>
       </div>
-    </>
-  );
+    </>)
 };
