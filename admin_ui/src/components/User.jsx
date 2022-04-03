@@ -60,7 +60,7 @@ export const User = () => {
     }
     const newUsers = users.filter((e) => !selectedRows.includes(e.id));
     setUsers(newUsers);
-    alert("Successfully deleted selected users! No users on this page click ok to go the next page");
+    alert("Successfully deleted selected users! No users on this page. Click ok to go the next page");
     setPage(page+1);
   };
   const handleSearch = (e) => {
@@ -235,7 +235,11 @@ export const User = () => {
         </div>
         <div>
           <ul>
-            <li onClick={() => setPage(1)}>First</li>
+            <li onClick={() => setPage(1)} style={
+                    page === 1
+                      ? { backgroundColor: "#1890ff", color: "white" }
+                      : { backgroundColor: "white" }
+                  }>First</li>
             <li>
               <button
                 className="pagebtn"
@@ -269,7 +273,11 @@ export const User = () => {
                 Next
               </button>
             </li>
-            <li onClick={() => setPage(Math.ceil(dataLength / 10))}>Last</li>
+            <li onClick={() => setPage(Math.ceil(dataLength / 10))} style={
+                    page === Math.ceil(dataLength / 10)
+                      ? { backgroundColor: "#1890ff", color: "white" }
+                      : { backgroundColor: "white" }
+                  }>Last</li>
           </ul>
         </div>
       </div>
