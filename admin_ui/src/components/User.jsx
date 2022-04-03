@@ -5,8 +5,11 @@ export const User = () => {
     const [users, setUsers] = useState([]);
     const [query, setQuery] = useState("");
     const [page, setPage] = useState(1);
-    const [updatedUser, setUpdatedUser] = useState({});
+    const [updatedName, setUpdatedName] = useState("");
+    const [updatedEmail, setUpdatedEmail] = useState("")
+    const [updatedRole, setUpdatedRole] = useState("")
     const [dataLength, setDataLength] = useState(0);
+    const [selectedRows, setSelectedRows] = useState([]);
     
     useEffect(() => {
         getUsers(page);
@@ -30,16 +33,24 @@ export const User = () => {
                 return {...e, isChecked : checked}
             });
             setUsers(newUsers);
+            for(let i = 0; i < users.length; i++) {
+                selectedRows.push(users[i].id);
+            }
         } else {
             let newUsers = users.map((e) =>
             e.name === name ? { ...e, isChecked: checked } : e
           );
           setUsers(newUsers);
+          setSelectedRows([...selectedRows, e.target.id]);
         }
     }
     const handleDeleteOne = (id) => {
        const updatedUsers = users.filter((e) => e.id !== id);
         setUsers(updatedUsers);
+    }
+    const handleDeleteMultiple = () => {
+        const newUsers = users.filter((e) => !selectedRows.includes(e.id));
+        setUsers(newUsers);
     }
     const handleSearch = (e) => {
         e.preventDefault();
@@ -51,24 +62,28 @@ export const User = () => {
             }
             setUsers(updatedUsers);
     }
-
-    //////------///////
+    const allPages = [];
+    for(let i = 1; i <= Math.ceil(dataLength/10); i++) {
+        allPages.push(i);
+    }
     const handleEdit = (e) => {
         let tempUsers = users.map((el) =>
         e.id === el.id ? {...el, doEdit : true} : el);
-        // setUpdatedUser(tempUsers);
         setUsers(tempUsers);
     }
-    const handleChange = (e) => {
-         const {name, value} = e.target;
-         setUpdatedUser({...updatedUser, [name] : value, doEdit:false});
-    }
     const handleSave = (e) => {
-       console.log(e);
-       console.log(updatedUser)
+       for(let i = 0; i < users.length; i++) {
+           if(e.id === users[i].id) {
+               users[i].name = updatedName.length>0 ? updatedName : users[i].name;
+               users[i].email = updatedEmail.length>0 ? updatedEmail : users[i].email;
+               users[i].role = updatedRole.length>0 ? updatedRole : users[i].role;
+               users[i].doEdit = false;
+           }
+       }
+       setUsers([...users])
     }
-    /////////------.///////
     return (
+        users.length < 1 ? <h1>No users found</h1> :
         <>
         <div className="container_1">
         <h1>Users List</h1>
@@ -89,14 +104,20 @@ export const User = () => {
             <tbody>
                 {users.map((e) => {
                    return(
-                   <tr key={e.id}>
-                        <td><input type="checkbox" name={e.name} onChange={handleCheck} checked={e?.isChecked || false}/></td>
-                        <td>{e.name} <input defaultValue={e.name} name={e.name} onChange={handleChange} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}} /> </td>
-                        <td>{e.email} <input defaultValue={e.email} name={e.email} onChange={handleChange} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
-                        <td>{e.role} <input defaultValue={e.role} name={e.role} onChange={handleChange} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
-                        <td><AiTwotoneEdit id={e.id} onClick={() => handleEdit(e)} style={!e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/>
-                        <AiOutlineSave style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}} onClick={()=>handleSave(e)}/>
-                         <AiTwotoneDelete onClick={() =>handleDeleteOne(e.id)} style={{color:"rgb(239, 55, 86)"}}/></td>
+                   <tr key={e.id} style={e.isChecked?{backgroundColor:"lightgray"} : {backgroundColor:"white"}}>
+                        <td><input type="checkbox" name={e.name} id={e.id} onChange={handleCheck} checked={e?.isChecked || false}/></td>
+
+                        <td>{e.name} <input defaultValue={e.name} name={e.name} onChange={(e) => setUpdatedName(e.target.value)} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}} /> </td>
+
+                        <td>{e.email} <input defaultValue={e.email} name={e.email} onChange={(e) => setUpdatedEmail(e.target.value)} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
+
+                        <td>{e.role} <input defaultValue={e.role} name={e.role} onChange={(e) => setUpdatedRole(e.target.value)} type="text" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/></td>
+
+                        <td><AiTwotoneEdit className="icon" id={e.id} onClick={() => handleEdit(e)} style={!e.doEdit? {visibility:"visible"} : {visibility:"hidden"}}/>
+
+                        <AiOutlineSave className="icon" style={e.doEdit? {visibility:"visible"} : {visibility:"hidden"}} onClick={()=>handleSave(e)}/>
+
+                         <AiTwotoneDelete className="icon" onClick={() =>handleDeleteOne(e.id)} style={{color:"rgb(239, 55, 86)"}}/></td>
                     </tr>)
                 })}
             </tbody>
@@ -104,11 +125,20 @@ export const User = () => {
         </div>
         <div className="footer">
             <div>
-                <button className="btn">Delete Selected</button> 
+                <button className="btn" onClick={() => handleDeleteMultiple()}>Delete Selected</button> 
             </div>
             <div>
-                <button disabled={page === 1} onClick={() => setPage(page-1)}>Prev</button>
-                <button disabled={page === Math.ceil(dataLength/10)} onClick={() => setPage(page+1)}>Next</button>
+                <ul>
+                    <li onClick={() => setPage(1)}>First</li>
+                    <li><button className="pagebtn" disabled={page === 1} onClick={() => setPage(page-1)}>Prev</button></li>
+                {allPages.map((e) => {
+                    return (
+                        <li key={e} onClick={() => setPage(e)} style={page === e ? {backgroundColor:"#1890ff", color:"white"} : {backgroundColor:"white"}} >{e}</li>
+                    )
+                })}
+                <li><button className="pagebtn" disabled={page === Math.ceil(dataLength/10)} onClick={() => setPage(page+1)}>Next</button></li>
+                <li onClick={() => setPage(Math.ceil(dataLength/10))}>Last</li>
+                </ul>
             </div>
         </div>
         </>
