@@ -59,9 +59,11 @@ export const User = () => {
       );
     }
     const newUsers = users.filter((e) => !selectedRows.includes(e.id));
+    if(newUsers.length ===0) {
+      alert("Successfully deleted selected users! No users on this page. Click ok to go the next page");
+      setPage(page+1);
+    }
     setUsers(newUsers);
-    alert("Successfully deleted selected users! No users on this page. Click ok to go the next page");
-    setPage(page+1);
   };
   const handleSearch = (e) => {
     e.preventDefault();
